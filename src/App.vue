@@ -1,18 +1,41 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <postForm></postForm>
+    <post v-for="post in posts" :key="post.id" :post="post"></post>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import axios from "axios";
+import post from "./components/post.vue";
+import postForm from "./components/postForm.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld
-  }
+    post,
+    postForm,
+  },
+  data() {
+    return {
+      posts: [],
+    };
+  },
+  mounted() {
+    axios
+      .request({
+        url: "http://127.0.0.1:5000/api/posts",
+        method: "GET",
+      })
+      .then((response) => {
+        this.posts = response.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    
+  },
 };
 </script>
 
